@@ -7,7 +7,6 @@ import os
 import sys
 import time
 import math
-
 import torch.nn as nn
 import torch.nn.init as init
 
@@ -122,3 +121,48 @@ def format_time(seconds):
     if f == '':
         f = '0ms'
     return f
+
+
+def process_csv(filepath):
+    # Create an empty dictionary
+    dict = {}
+    
+    # Open the file
+    with open(filepath, 'r') as f:
+        # Read the file line-by-line
+        for line in f:
+            # Split the line into a list
+            elements = line.split(',')
+            # Get the first element as the key
+            key = elements[0]
+            # Remove the first element from the list
+            elements.pop(0)
+            # Convert the remaining elements in the list to floats
+            elements = [float(x) for x in elements]
+            # Add the key and the list of floats to the dictionary
+            dict[key] = elements
+    
+    # Return the dictionary
+    return dict
+
+def process_csv2(filepath):
+    # Create an empty dictionary
+    dict = {}
+    
+    # Open the file
+    with open(filepath, 'r') as f:
+        # Read the file line-by-line
+        for line in f:
+            # Split the line into a list
+            elements = line.split(',')
+            # Get the first element as the key
+            key = elements[0]
+            # Remove the first element from the list
+            elements.pop(0)
+            # Convert the remaining elements to 1 if they are greater than 0
+            elements = [1 if float(x) > 0 else 0 for x in elements]
+            # Add the key and the list of floats to the dictionary
+            dict[key] = elements
+    
+    # Return the dictionary
+    return dict
