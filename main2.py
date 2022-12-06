@@ -9,7 +9,7 @@ import torchvision
 import torchvision.transforms as transforms
 
 import os
-import ipdb
+# import ipdb
 import wandb
 import argparse
 import numpy as np
@@ -26,7 +26,7 @@ parser.add_argument('--resume', '-r', action='store_true',
 parser.add_argument('--run_name', default="cifar10-resnet18-ce-1", type=str, help='name of the run')
 args = parser.parse_args()
 
-wandb.init(project="CS839-Project")
+wandb.init(project="CS839-resnet50-leuven-mse")
 #name the wandb run
 wandb.run.name = args.run_name
 
@@ -62,7 +62,8 @@ testloader = torch.utils.data.DataLoader(
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
 
-class_vectors = process_csv2("./vectors.csv")
+# class_vectors = process_csv2("./vectors.csv")
+class_vectors = process_csv2("./vectors_short.csv")
 dim = len(class_vectors["plane"])
 
 # Model
@@ -73,7 +74,7 @@ print('==> Building model..')
 # net = GoogLeNet()
 # net = DenseNet121()
 net = ResNet50(num_classes=dim)
-net.linear = nn.Sequential(nn.Linear(512,1024), nn.ReLU(inplace=True), nn.Linear(1024,2059))
+# net.linear = nn.Sequential(nn.Linear(512,1024), nn.ReLU(inplace=True), nn.Linear(1024,dim))
 # ipdb.set_trace()
 # net = ResNeXt29_2x64d()
 # net = MobileNet()
@@ -101,7 +102,7 @@ if args.resume:
     best_acc = checkpoint['acc']
     start_epoch = checkpoint['epoch']
 
-criterion = nn.BCELoss()
+criterion = nn.MSELoss()
 optimizer = optim.SGD(net.parameters(), lr=args.lr,
                       momentum=0.9, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)

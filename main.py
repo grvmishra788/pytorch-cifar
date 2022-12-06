@@ -15,18 +15,22 @@ import argparse
 from models import *
 from utils import progress_bar
 
-wandb.init(project="CS839-Project-baseline")
+wandb.init(project="CS839-resnet50-baseline")
 
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
 parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
+parser.add_argument('--run_name', default="cifar10-resnet18-ce-1", type=str, help='name of the run')
 args = parser.parse_args()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 best_acc = 0  # best test accuracy
 start_epoch = 0  # start from epoch 0 or last checkpoint epoch
+
+#name the wandb run
+wandb.run.name = args.run_name
 
 # Data
 print('==> Preparing data..')
@@ -62,7 +66,7 @@ print('==> Building model..')
 # net = PreActResNet18()
 # net = GoogLeNet()
 # net = DenseNet121()
-net = ResNet18(num_classes=10)
+net = ResNet50(num_classes=10)
 # net = ResNeXt29_2x64d()
 # net = MobileNet()
 # net = MobileNetV2()
